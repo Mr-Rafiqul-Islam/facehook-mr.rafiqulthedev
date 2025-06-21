@@ -16,9 +16,9 @@ export default function LoginForm() {
   const SubmitForm = (formData) => {
     console.log(formData);
 
-
     //  make an api call
     // Will Return Tokens and Logged in user information
+
     const user = { ...formData };
     setAuth({ user });
     navigate("/");
