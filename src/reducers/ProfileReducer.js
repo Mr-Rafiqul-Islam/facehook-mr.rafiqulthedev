@@ -33,14 +33,14 @@ const profileReducer=(action, state)=>{
         case actions.profile.USER_DATA_EDITED:{
             return{
                 ...state,
-                loading:false,
-                user:action.data,
+                loading: false,
+                user: action.data,
             }
         }
         case actions.profile.IMAGE_UPDATED:{
             return{
                 ...state,
-                loading:false,
+                loading: false,
                 user:{
                     ...state.user,
                     avatar:action.data.avatar,

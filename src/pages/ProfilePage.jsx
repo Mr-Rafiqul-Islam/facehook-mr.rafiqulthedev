@@ -34,13 +34,15 @@ export default function ProfilePage() {
     };
     fetchProfile();
   }, [auth?.user?.id, dispatch, api]);
-  if (state?.loading)
-    return <h1 className="text-3xl">Profile Data is Fetching....</h1>;
+
   return (
     <main className="mx-auto max-w-[1020px] py-8">
       <div className="container">
-        <ProfileInfo/>
-        <MyPosts/>
+        {state?.loading && (
+          <h1 className="text-3xl">Profile Data is Fetching...</h1>
+        )}
+        <ProfileInfo />
+        <MyPosts />
       </div>
     </main>
   );
