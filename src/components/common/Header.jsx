@@ -5,8 +5,10 @@ import homeIcon from "../../assets/icons/home.svg";
 import notificationIcon from "../../assets/icons/notification.svg";
 import Avatar from "../../assets/images/avatars/avatar_1.png";
 import Logout from "../auth/Logout";
+import useAuth from "../../hooks/useAuth";
 
 export default function Header() {
+  const {auth}= useAuth();
   return (
     <>
       {/* Navbar */}
@@ -30,7 +32,7 @@ export default function Header() {
             </button>
             <Logout/>
             <button className="flex-center !ml-8 gap-3">
-              <span className="text-lg font-medium lg:text-xl">Sumit</span>
+              <span className="text-lg font-medium lg:text-xl">{auth?.user?.firstName}</span>
               <img
                 className="max-h-[32px] max-w-[32px] lg:max-h-[44px] lg:max-w-[44px]"
                 src={Avatar}
