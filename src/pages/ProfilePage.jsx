@@ -1,37 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useAxios from "../hooks/useAxios";
 import useAuth from "../hooks/useAuth";
+import useProfile from "../hooks/useProfile";
+import { actions } from "../actions";
+import ProfileInfo from "../components/profile/ProfileInfo";
+import MyPosts from "../components/profile/MyPosts";
 
 export default function ProfilePage() {
   const { api } = useAxios();
   const { auth } = useAuth();
-  const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { state, dispatch } = useProfile();
 
   useEffect(() => {
-    setLoading(true);
+    dispatch({ type: actions.profile.DATA_FETCHING });
     const fetchProfile = async () => {
       try {
         const response = await api.get(
           `${import.meta.env.VITE_SERVER_BASE_URL}/profile/${auth?.user?.id}`
         );
-        setUser(response?.data?.user);
-        setPosts(response?.data?.posts);
+        if (response.status === 200) {
+          dispatch({
+            type: actions.profile.DATA_FETCHED,
+            data: response?.data,
+          });
+        }
       } catch (err) {
         console.error(err);
-        setError(err);
-      }finally{
-        setLoading(false);
+        dispatch({
+          type: actions.profile.DATA_FETCH_ERROR,
+          error: err.message,
+        });
       }
     };
     fetchProfile();
-  }, []);
-  if (loading) return <h1 className="text-3xl">loading....</h1>
-  return <div>
-    <h1 className="text-3xl">{user?.firstName}</h1>
-    {error && <h1>{error.message}</h1>}
-    {posts && <h1>{posts?.length}</h1>}
-  </div>;
+  }, [auth?.user?.id, dispatch, api]);
+  if (state?.loading)
+    return <h1 className="text-3xl">Profile Data is Fetching....</h1>;
+  return (
+    <main className="mx-auto max-w-[1020px] py-8">
+      <div className="container">
+        <ProfileInfo/>
+        <MyPosts/>
+      </div>
+    </main>
+  );
 }
