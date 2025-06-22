@@ -3,7 +3,6 @@ import useAuth from "./useAuth";
 import { api } from "../api";
 import axios from "axios";
 
-
 const useAxios = () => {
   const { auth, setAuth } = useAuth();
 
@@ -40,7 +39,7 @@ const useAxios = () => {
             const { token } = response.data;
 
             console.log(`New Token: ${token}`);
-            setAuth({...auth, authToken: token})
+            setAuth({ ...auth, authToken: token });
 
             // Retry the original request with the new token
             originalRequest.headers.Authorization = `Bearer ${token}`;
@@ -56,10 +55,10 @@ const useAxios = () => {
     return () => {
       api.interceptors.request.eject(requestIntercept);
       api.interceptors.response.eject(responseIntercept);
-    }
+    };
   }, [auth?.authToken, auth, setAuth]);
 
-  return {api};
+  return { api };
 };
 
 export default useAxios;
