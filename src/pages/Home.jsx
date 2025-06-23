@@ -1,15 +1,48 @@
-import React from "react";
-import Header from "../components/common/Header";
-import useAuth from "../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { useEffect, useReducer } from "react";
+import { initialState, postReducer } from "../reducers/PostReducer";
+import useAxios from "../hooks/useAxios";
+import { actions } from "../actions";
+import PostList from "../components/posts/PostList";
 
 export default function HomePage() {
-  const { auth } = useAuth();
-  console.log(auth);
+  const [state, dispatch] = useReducer(postReducer, initialState);
+  const { api } = useAxios();
+
+  useEffect(() => {
+    dispatch({ type: actions.post.DATA_FETCHING });
+
+    const fetchPost = async () => {
+      try {
+        const response = await api.get(
+          `${import.meta.env.VITE_SERVER_BASE_URL}/posts`
+        );
+        if (response.status === 200) {
+          dispatch({
+            type: actions.post.DATA_FETCHED,
+            data: response.data,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        dispatch({
+          type: actions.post.DATA_FETCH_ERROR,
+          error: error.message,
+        });
+      }
+    };
+
+    fetchPost();
+  }, [api]);
+
+  if (state?.error) {
+    return <div> Error in fatching posts {state?.error?.message}</div>;
+  }
   return (
-    <div className="container">
-      <Link to="/me">Go to Profile</Link>
-      <h2 className="text-5xl">welcome to bangladesh</h2>
-    </div>
+    <main className="mx-auto max-w-[1020px] py-8">
+      <div className="container">
+        {state?.loading && <h1 className="text-3xl">We are working...</h1>}
+        <PostList posts={state?.posts} />
+      </div>
+    </main>
   );
 }
