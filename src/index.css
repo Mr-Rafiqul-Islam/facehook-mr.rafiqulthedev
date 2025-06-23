@@ -27,6 +27,9 @@
     body {
         @apply bg-deepDark font-inter text-gray-100;
     }
+    button{
+        @apply cursor-pointer;
+    }
 }
 
 @layer components {
