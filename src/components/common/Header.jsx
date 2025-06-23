@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import homeIcon from "../../assets/icons/home.svg";
 import notificationIcon from "../../assets/icons/notification.svg";
@@ -8,6 +8,7 @@ import useAuth from "../../hooks/useAuth";
 import useProfile from "../../hooks/useProfile";
 
 export default function Header() {
+  const navigate = useNavigate()
   const {auth}= useAuth();
   const {state}= useProfile();
   const user = state?.user ?? auth?.user;
@@ -33,14 +34,17 @@ export default function Header() {
               <img src={notificationIcon} alt="Notification" />
             </button>
             <Logout/>
-            <button className="flex-center !ml-8 gap-3">
+            <div className="flex-center !ml-8 gap-3">
               <span className="text-lg font-medium lg:text-xl capitalize">{user?.firstName}</span>
+              <button className="max-h-[32px] max-w-[32px] lg:max-h-[44px] lg:max-w-[44px] overflow-hidden !rounded-full cursor-pointer" onClick={()=>navigate("/me")}>
+
               <img
-                className="max-h-[32px] max-w-[32px] lg:max-h-[44px] lg:max-w-[44px]"
+                className=""
                 src={`${import.meta.env.VITE_SERVER_BASE_URL}/${user?.avatar}`}
                 alt="Avatar"
               />
-            </button>
+              </button>
+            </div>
           </div>
           {/* nav links ends */}
         </div>
