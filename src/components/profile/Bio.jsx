@@ -6,8 +6,9 @@ import useAxios from "../../hooks/useAxios";
 import CheckIcon from "../../assets/icons/check.svg";
 
 const Bio = () => {
-  const { state, dispatch } = useProfile();
   const { api } = useAxios();
+  const { state, dispatch } = useProfile();
+  
 
   const [bio, setBio] = useState(state?.user?.bio);
   const [editMode, setEditMode] = useState(false);

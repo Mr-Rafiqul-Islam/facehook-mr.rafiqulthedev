@@ -10,13 +10,14 @@ export default function ProfilePage() {
   const { api } = useAxios();
   const { auth } = useAuth();
   const { state, dispatch } = useProfile();
+  const user = auth?.user;
 
   useEffect(() => {
     dispatch({ type: actions.profile.DATA_FETCHING });
     const fetchProfile = async () => {
       try {
         const response = await api.get(
-          `${import.meta.env.VITE_SERVER_BASE_URL}/profile/${auth?.user?.id}`
+          `${import.meta.env.VITE_SERVER_BASE_URL}/profile/${user.id}`
         );
         if (response.status === 200) {
           dispatch({
@@ -33,16 +34,19 @@ export default function ProfilePage() {
       }
     };
     fetchProfile();
-  }, [auth?.user?.id, dispatch, api]);
+  }, [user.id, dispatch, api]);
 
   return (
     <main className="mx-auto max-w-[1020px] py-8">
       <div className="container">
-        {state?.loading && (
+        {state?.loading ? (
           <h1 className="text-3xl">Profile Data is Fetching...</h1>
+        ):(
+          <>
+          <ProfileInfo />
+          <MyPosts />
+          </>
         )}
-        <ProfileInfo />
-        <MyPosts />
       </div>
     </main>
   );
