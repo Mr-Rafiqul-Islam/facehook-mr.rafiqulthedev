@@ -1,11 +1,13 @@
-import { useEffect, useReducer } from "react";
-import { initialState, postReducer } from "../reducers/PostReducer";
+import { useEffect } from "react";
+
 import useAxios from "../hooks/useAxios";
 import { actions } from "../actions";
 import PostList from "../components/posts/PostList";
+import { usePost } from "../hooks/usePost";
+import NewPost from "../components/posts/NewPost";
 
 export default function HomePage() {
-  const [state, dispatch] = useReducer(postReducer, initialState);
+  const { state, dispatch } = usePost();
   const { api } = useAxios();
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export default function HomePage() {
     };
 
     fetchPost();
-  }, [api]);
+  }, [api,dispatch]);
 
   if (state?.error) {
     return <div> Error in fatching posts {state?.error?.message}</div>;
@@ -41,6 +43,7 @@ export default function HomePage() {
     <main className="mx-auto max-w-[1020px] py-8">
       <div className="container">
         {state?.loading && <h1 className="text-3xl">We are working...</h1>}
+        <NewPost />
         <PostList posts={state?.posts} />
       </div>
     </main>
