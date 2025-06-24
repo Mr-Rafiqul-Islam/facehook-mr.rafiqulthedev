@@ -1,11 +1,12 @@
-import useProfile from "./useProfile";
+import useAuth from "./useAuth";
+// import useProfile from "./useProfile";
 
 
 export const useAvatar = (post) => {
-    const { state } = useProfile();
+    const { auth } = useAuth();
 
-    const isMe = post?.author?.id === state?.user?.id;
-    const avatar = isMe ? `${state?.user?.avatar}` : `${post?.author?.avatar}`;
+    const isMe = post?.author?.id === auth?.user?.id;
+    const avatar = isMe ? auth?.user?.avatar : post?.author?.avatar;
 
     const avatarURL = `${import.meta.env.VITE_SERVER_BASE_URL}/${avatar}`;
 
