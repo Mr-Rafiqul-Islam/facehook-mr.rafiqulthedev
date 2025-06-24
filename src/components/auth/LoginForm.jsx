@@ -16,7 +16,6 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const SubmitForm = async (formData) => {
-    console.log(formData);
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_BASE_URL}/auth/login`,
